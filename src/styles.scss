@@ -1,0 +1,17 @@
+/* You can add global styles to this file, and also import other style files */
+.game, .boat {
+    margin-left: -500px;
+}
+
+.scores {
+    background: navy;
+    color: #ffffff;
+    font-family: Arial;
+    font-size: 18px;
+    font-weight: bold;
+    width: 500px;
+    margin-bottom: 3px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
