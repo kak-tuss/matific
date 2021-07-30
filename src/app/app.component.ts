@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { nextTick } from 'q';
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from './game/controller/consts';
-import { GameController } from './game/controller/gameController';
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from './game/consts';
+import { GameView } from './game/gameView';
+import { GameController } from './game/gameController';
 
 
 @Component({
@@ -16,34 +16,16 @@ export class AppComponent implements OnInit {
   
   ngOnInit() {
     const app = document.getElementById('app-game');
-    const canvas: HTMLCanvasElement = document.createElement('canvas');
-    const bgCanvas: HTMLCanvasElement = document.createElement('canvas');
-    const boatCanvas: HTMLCanvasElement = document.createElement('canvas');
     const scoresElement: HTMLDivElement = document.createElement('div');
 
-    canvas.id = 'game';
-    canvas.width = CANVAS_WIDTH;
-    canvas.height = CANVAS_HEIGHT;
-    canvas.className = 'game'
-
-    bgCanvas.id = 'bg';
-    bgCanvas.width = CANVAS_WIDTH;
-    bgCanvas.height = CANVAS_HEIGHT;
-
-    boatCanvas.id = 'boat';
-    boatCanvas.width = CANVAS_WIDTH;
-    boatCanvas.height = CANVAS_HEIGHT;
-    boatCanvas.className = 'boat';
-
     scoresElement.className = 'scores'
-
     app?.appendChild(scoresElement);
-    app?.appendChild(bgCanvas);
-    app?.appendChild(canvas);
-    app?.appendChild(boatCanvas);
 
-    const game = new GameController(scoresElement, bgCanvas, canvas, boatCanvas);
-    game.init();
+    
+    const gameView = new GameView(app, scoresElement);
+    gameView.init();
+    const game = new GameController(gameView);
+    game.startGame();
     
 
   }
