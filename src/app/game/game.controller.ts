@@ -1,15 +1,13 @@
 import { CANVAS_WIDTH } from "./consts";
 import { BoatModel } from "./entities/boat/boatModel";
 import { PlaneModel } from "./entities/plane/planeModel";
-import { GameView } from "./gameView";
+import { Game } from "./game.model";
+import { GameView } from "./game.view";
 import { Score, Location } from "./interfaces";
 import { Event } from "./utils/utils";
 
 export class GameController {
-    scores: Score = {
-        score: 0,
-        lives: 3
-    }
+    game: Game = new Game();
 
     gameView: GameView;
     plane: PlaneModel;
@@ -18,20 +16,25 @@ export class GameController {
     planeInterval: any;
     parachutistsInterval: any;
 
-    scoresUpdated: Event;
-
     constructor(
-        gameView: GameView
+        app: any, 
+        scoresElement: any
     ) {
-        this.gameView = gameView;
+        this.gameView = new GameView(app, scoresElement, this.game);
+        this.gameView.init();
+    
+    
         this.plane = this.gameView.planeView.movable;
         this.boat = this.gameView.boatView.movable;
 
-        this.scoresUpdated = new Event();
+        this.game.onChange.addListener((score: Score) => {
+            if (score.lives === 0) {
+                this.stopGame();
+            }
+        });
     }
 
     startGame() {
-        this.updateScores();
         this.startPlane();
         this.dropParachutists();
     }
@@ -68,30 +71,20 @@ export class GameController {
     drop() {
         const x = this.plane.location.x + Math.round(this.plane.imageWidth / 2);
         const y = this.plane.imageHeight + 5;
-        const parachutist = this.gameView.createParachutist({x: x, y: y});
+        const parachutist = this.gameView.createParachutist({x, y});
 
         parachutist.start();
         parachutist.hitBottom.addListener((location: Location) => {
-            this.recalculateScores(location);
+            this.play(location);
         });
     }
 
-    recalculateScores(dropLocation: Location) {
+    play(dropLocation: Location) {
         if (this.boat.location.x < dropLocation.x &&
             dropLocation.x < this.boat.location.x + this.boat.imageWidth) {
-                this.scores.score+=10;
+                this.game.catch();
             } else {
-                this.scores.lives--;
+                this.game.miss();
             }
-
-        if (this.scores.lives === 0) {
-            this.stopGame();
-        }
-
-        this.updateScores();
-    }
-
-    updateScores() {
-        this.gameView.scores.innerText = `SCORE: ${this.scores.score} LIVES: ${this.scores.lives}`;
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from './game/consts';
-import { GameView } from './game/gameView';
-import { GameController } from './game/gameController';
+import { GameView } from './game/game.view';
+import { GameController } from './game/game.controller';
 
 
 @Component({
@@ -21,10 +21,7 @@ export class AppComponent implements OnInit {
     scoresElement.className = 'scores'
     app?.appendChild(scoresElement);
 
-    
-    const gameView = new GameView(app, scoresElement);
-    gameView.init();
-    const game = new GameController(gameView);
+    const game = new GameController(app, scoresElement);
     game.startGame();
     
 
