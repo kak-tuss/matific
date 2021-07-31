@@ -13,8 +13,4 @@ export class SeaModel extends MovableModel {
             move: () => {}
         });
     }
-
-    getSeaLevel(): number {
-        return CANVAS_HEIGHT - SEA_DEPTH;
-    }
 }

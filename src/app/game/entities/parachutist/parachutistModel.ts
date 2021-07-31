@@ -1,6 +1,6 @@
 import { CANVAS_HEIGHT, SEA_DEPTH } from "../../consts";
 import { Location } from "../../interfaces";
-import { Event } from "../../utils/event";
+import { Event } from "../../utils/utils";
 import { MovableModel, MovableObject } from "../../movable/movable.model";
 
 export class ParachutistModel extends MovableModel {
@@ -41,54 +41,4 @@ export class ParachutistModel extends MovableModel {
             }(this)),
             10);
     }
-
-
-
-
-
-    // canvasObj: any;
-    // step: number = 1;
-    // planeLength: number = 0;
-    // location: Location = INITIAL_LOCATION;
-    // interval: any = null;
-
-    // constructor(canvasContext: any, location: Location) {
-    //     super(canvasContext, 'assets/parachutist.png', location);
-    //     if (location) {
-    //         this.location = location;
-    //     }
-    //     this.step = this.step * Math.round(1 + Math.random());
-    // }
-    
-    // fall() {
-    //     let newY = this.location.y + this.step;
-    //     if (newY > CANVAS_HEIGHT - SEA_DEPTH - this.imageHeight) {
-    //         const event = new CustomEvent('land', {
-    //             detail: this.location.x
-    //         });
-    //         window.dispatchEvent(event);
-    //         this.stop();
-    //         return;
-    //     }
-
-    //     this.redraw({
-    //         x: this.location.x,
-    //         y: newY
-    //     });
-    // }
-
-    // start() {
-    //     this.interval = setInterval(
-    //         (function(self) {
-    //             return function() {
-    //                 self.fall();
-    //             }
-    //         }(this)),
-    //         10);
-    // }
-
-    // stop() {
-    //     clearInterval(this.interval);
-    //     this.remove();
-    // }
 }

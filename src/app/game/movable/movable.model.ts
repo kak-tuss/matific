@@ -1,5 +1,5 @@
 import { Location } from "../interfaces";
-import { Event } from "../utils/event";
+import { Event } from "../utils/utils";
 export interface MovableObject {
     location: Location;
     spriteUrl: string;
@@ -29,7 +29,6 @@ export class MovableModel {
     ){
         this.location = location;
         this.spriteUrl = spriteUrl;
-        this.move = move;
         this.move = (params: any) => {
             this.location = move(params);
             this.onChange.trigger({});

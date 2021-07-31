@@ -1,5 +1,5 @@
 import { MovableModel } from "./movable.model";
-import { Location } from "../interfaces";
+import { loadImage } from "../utils/utils";
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../consts";
 
 export class MovableView {
@@ -24,10 +24,6 @@ export class MovableView {
         });
     }
 
-    getLocation(): Location {
-        return this.movable.location;
-    }
-
     draw() {
         if (this.image) {
             this.contextObj.drawImage(this.image, 
@@ -46,15 +42,4 @@ export class MovableView {
         this.remove();
         this.draw();
     }
-}
-
-export function loadImage(url: string): Promise<any> {
-    return new Promise (
-        resolve => {
-            const image = new Image();
-            image.addEventListener('load', () => {
-                resolve(image);
-            });
-            image.src = url;
-        });
 }
