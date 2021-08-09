@@ -1,3 +1,5 @@
+import { GAME_CONFIG } from "../config";
+
 export class Event {
     listeners: Function[] = [];
     constructor() {
@@ -23,4 +25,16 @@ export function loadImage(url: string): Promise<any> {
             });
             image.src = url;
         });
+}
+
+export function createCanvasContext(app: any, className: string): CanvasRenderingContext2D | null {
+    const newCanvas: HTMLCanvasElement = document.createElement('canvas');
+
+    newCanvas.width = GAME_CONFIG.canvas_size.width;
+    newCanvas.height = GAME_CONFIG.canvas_size.height;
+    newCanvas.className = className;
+
+    app.appendChild(newCanvas);
+
+    return newCanvas.getContext("2d");
 }

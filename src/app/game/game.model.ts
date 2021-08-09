@@ -1,22 +1,17 @@
+import { BoatModel } from "./entities/boat/boat.model";
+import { PlaneModel } from "./entities/plane/plane.model";
 import { Score } from "./interfaces";
-import { Event } from "./utils/utils";
 
 export class Game {
     scores: Score = {
         score: 0,
         lives: 3
     }
-    onChange: Event = new Event();
-    constructor() { }
+    boat: BoatModel;
+    plane: PlaneModel;
 
-    catch() {
-        this.scores.score+=10;
-        this.onChange.trigger(this.scores);
-    }
-
-    miss() {
-        this.scores.lives--;
-        if (this.scores.lives < 0) this.scores.lives = 0;
-        this.onChange.trigger(this.scores);
+    constructor(boat: BoatModel, plane: PlaneModel) {
+        this.boat = boat;
+        this.plane = plane;
     }
 }

@@ -1,15 +1,13 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH, SEA_DEPTH } from "../../consts";
+import { GAME_CONFIG } from "../../config";
 import { MovableModel } from "../../movable/movable.model";
+import { Location } from "../../interfaces"; 
 
-const STEP = 20;
+const STEP = GAME_CONFIG.boat.step;
 export class BoatModel extends MovableModel {
-    constructor() {
+    constructor(initialLocation: Location) {
         super({
-            location: {
-                x: Math.round(CANVAS_WIDTH / 2 - 60),
-                y: CANVAS_HEIGHT - SEA_DEPTH - 40
-            },
-            spriteUrl: 'assets/boat.png',
+            location: initialLocation,
+            spriteUrl: GAME_CONFIG.boat.asset,
             move: (direction: boolean) => {
                 if (direction) {
                     return {
@@ -25,5 +23,4 @@ export class BoatModel extends MovableModel {
             }
         });        
     }    
-
 }

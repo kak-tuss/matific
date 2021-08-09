@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from './game/consts';
-import { GameView } from './game/game.view';
 import { GameController } from './game/game.controller';
 
 

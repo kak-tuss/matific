@@ -1,13 +1,9 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./consts";
-import { BoatModel } from "./entities/boat/boatModel";
-import { ParachutistModel } from "./entities/parachutist/parachutistModel";
-import { ParachutistView } from "./entities/parachutist/parachutistView";
-import { PlaneModel } from "./entities/plane/planeModel";
-import { SeaModel } from "./entities/sea/seaModel";
+import { GAME_CONFIG } from "./config";
+import { ParachutistModel } from "./entities/parachutist/parachutist.model";
 import { Game } from "./game.model";
 import { Score, Location } from "./interfaces";
 import { MovableView } from "./movable/movable.view";
-import { loadImage } from "./utils/utils";
+import { loadImage, createCanvasContext } from "./utils/utils";
 
 export class GameView {
     app: any;
@@ -16,7 +12,11 @@ export class GameView {
     planeView: any;
     boatView: any;
 
-    model: Game;
+    parachutists: any[] = [];
+
+    halfBoat: number = 0;
+
+    game: Game;
     scores: any;
 
     constructor(
@@ -26,71 +26,65 @@ export class GameView {
     ) {
         this.app = app;
         this.scores = scoresObj;
-        this.model = gameModel;
+        this.game = gameModel;
     }
 
     init() {
-        this.updateScores(this.model.scores);
-        const bgContext: CanvasRenderingContext2D | null = this.createCanvasContext('bg');
-        this.loadBGAssets(bgContext).then(() => {
-            let sea = new SeaModel();
-            this.seaView = new MovableView(bgContext, sea);
-            this.seaView.draw();
-        });
+        this.updateScores(this.game.scores);
+        const bgContext: CanvasRenderingContext2D | null = createCanvasContext(this.app, 'bg');
+        this.loadBGAssets(bgContext);
 
-        const planeContext: CanvasRenderingContext2D | null = this.createCanvasContext('plane');
-        let plane = new PlaneModel();
-        this.planeView = new MovableView(planeContext, plane);
-        this.planeView.animate({
-            x: CANVAS_WIDTH,
-            y: 10
-        });
+        const boatContext: CanvasRenderingContext2D | null = createCanvasContext(this.app, 'boat');
+        this.boatView = new MovableView(boatContext, this.game.boat);
+        this.renderBoat();
 
-        const boatContext: CanvasRenderingContext2D | null = this.createCanvasContext('boat');
-        let boat = new BoatModel();
-        this.boatView = new MovableView(boatContext, boat);
+        this.halfBoat = Math.round(this.boatView.imageWidth / 2);
 
-        this.model.onChange.addListener((scores: Score) => {
-            this.updateScores(scores);
-        });
-
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                this.boatView.movable.move(false);
-            }
-            if (e.key === 'ArrowRight') {
-                this.boatView.movable.move(true);
-            }
-        });
+        const planeContext: CanvasRenderingContext2D | null = createCanvasContext(this.app, 'plane');
+        this.planeView = new MovableView(planeContext, this.game.plane);
+        this.renderPlane();
     }
 
     loadBGAssets(bgContext: CanvasRenderingContext2D | null): Promise<any>{
-        return loadImage('assets/background.png').then((image) => {
-            bgContext?.drawImage(image,0,0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        return loadImage(GAME_CONFIG.background).then((bgImage) => {
+            bgContext?.drawImage(bgImage,0,0, GAME_CONFIG.canvas_size.width, GAME_CONFIG.canvas_size.height);
+            loadImage(GAME_CONFIG.sea).then((seaImage) => {
+                bgContext?.drawImage(
+                    seaImage, 
+                    0, 
+                    GAME_CONFIG.canvas_size.height - GAME_CONFIG.canvas_size.sea_depth, 
+                    GAME_CONFIG.canvas_size.width, 
+                    GAME_CONFIG.canvas_size.sea_depth);
+            })
         });
     }
 
+    renderPlane() {
+        if (this.game.plane.location.x <= -1 * this.planeView.imageWidth) {
+            this.game.plane.location.x = GAME_CONFIG.canvas_size.width;
+        }
+        this.planeView.animate();
+    }
+
+    renderBoat() {
+        if (this.game.boat.location.x < -1 * this.halfBoat) {
+            this.game.boat.location.x = -1 * this.halfBoat;
+        }
+        if (this.game.boat.location.x > GAME_CONFIG.canvas_size.width + this.halfBoat) {
+            this.game.boat.location.x = GAME_CONFIG.canvas_size.width + this.halfBoat;
+        }
+        this.boatView.animate();
+    }
+
     createParachutist(location: Location): ParachutistModel {
-        const context = this.createCanvasContext('parachutist');
-        const parachutist = new ParachutistModel({location: location});
-        const parachutistView = new ParachutistView(context, parachutist);
+        const context = createCanvasContext(this.app, 'parachutist');
+        const parachutist = new ParachutistModel(location);
+        const parachutistView = new MovableView(context, parachutist);
+        this.parachutists.push(parachutist);
         return parachutist;
     }
 
     updateScores(scores: Score) {
         this.scores.innerText = `SCORE: ${scores.score} LIVES: ${scores.lives}`;
     }
-
-    createCanvasContext(className: string): CanvasRenderingContext2D | null {
-        const newCanvas: HTMLCanvasElement = document.createElement('canvas');
-
-        newCanvas.width = CANVAS_WIDTH;
-        newCanvas.height = CANVAS_HEIGHT;
-        newCanvas.className = className;
-
-        this.app.appendChild(newCanvas);
-
-        return newCanvas.getContext("2d");
-    }
-
 }
