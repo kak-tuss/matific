@@ -8,6 +8,7 @@ export const GAME_CONFIG = {
     sea: 'assets/sea.png',
     plane: {
         speed: 10,
+        step: 1,
         asset: 'assets/plane.png',
     },
     boat: {
@@ -16,6 +17,7 @@ export const GAME_CONFIG = {
     },
     parachutist: {
         speed: 10,
+        step: 1,
         asset: 'assets/parachutist.png',
     }
 }

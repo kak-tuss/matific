@@ -40,10 +40,10 @@ export class GameController {
 
         window.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') {
-                this.game.boat.move(false);
+                this.game.boat.location = this.game.boat.move(false);
             }
             if (e.key === 'ArrowRight') {
-                this.game.boat.move(true);
+                this.game.boat.location = this.game.boat.move(true);
             }
             this.gameView.renderBoat();
         });
@@ -63,7 +63,7 @@ export class GameController {
         this.planeInterval = setInterval(
             (function(self) {
                 return function() {
-                    self.game.plane.move();
+                    self.game.plane.location = self.game.plane.move();
                     self.gameView.renderPlane();
                 }
             }(this)),

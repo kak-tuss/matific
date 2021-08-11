@@ -8,10 +8,10 @@ export class PlaneModel extends MovableModel {
             location: initialLocation,
             spriteUrl: GAME_CONFIG.plane.asset,
             move: (): Location => {
-                    return {
-                        x: this.location.x - 1,
-                        y: this.location.y
-                    }                
+                return {
+                    x: this.location.x - GAME_CONFIG.plane.step,
+                    y: this.location.y
+                }                
             }
         });        
     }

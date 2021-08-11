@@ -25,7 +25,7 @@ export class ParachutistController {
             (function(self) {
                 return function() {
                     if (self.parachutist.location.y < GAME_CONFIG.canvas_size.height - GAME_CONFIG.canvas_size.sea_depth - self.parachutistView.imageHeight) {
-                        self.parachutist.move();
+                        self.parachutist.location = self.parachutist.move();
                         self.parachutistView.animate();
                     } else {
                         clearInterval(self.fallInterval);

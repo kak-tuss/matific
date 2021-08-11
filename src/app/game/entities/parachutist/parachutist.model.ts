@@ -10,7 +10,7 @@ export class ParachutistModel extends MovableModel {
             move: (): Location => {
                 return {
                     x: this.location.x,
-                    y: this.location.y + 1
+                    y: this.location.y + GAME_CONFIG.parachutist.step
                 }
             }
         }); 

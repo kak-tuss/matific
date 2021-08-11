@@ -24,8 +24,6 @@ export class MovableModel {
     ){
         this.location = location;
         this.spriteUrl = spriteUrl;
-        this.move = (params: any) => {
-            this.location = move(params);
-        }
+        this.move = (params: any) => move(params);
     }
 }
