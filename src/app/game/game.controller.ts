@@ -98,15 +98,20 @@ export class GameController {
     }
 
     catch() {
-        this.game.scores.score+=10;
-        this.gameView.updateScores(this.game.scores);
+        const scores = this.game.getScores();
+        this.game.setScore(scores.score + 10);
+        this.gameView.updateScoresDisplay(this.game.getScores());
     }
 
     miss() {
-        this.game.scores.lives--;
-        if (this.game.scores.lives < 0) this.game.scores.lives = 0;
-        this.gameView.updateScores(this.game.scores);
-        if (this.game.scores.lives <= 0) {
+        const scores = this.game.getScores();
+        if (scores.lives < 0) {
+            this.game.setLives(0);
+        } else {
+            this.game.setLives(scores.lives - 1);
+        }
+        this.gameView.updateScoresDisplay(this.game.getScores());
+        if (scores.lives <= 0) {
             this.stopGame();
         }
     }

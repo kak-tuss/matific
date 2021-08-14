@@ -30,7 +30,7 @@ export class GameView {
     }
 
     init() {
-        this.updateScores(this.game.scores);
+        this.updateScoresDisplay(this.game.getScores());
         const bgContext: CanvasRenderingContext2D | null = createCanvasContext(this.app, 'bg');
         this.loadBGAssets(bgContext);
 
@@ -84,7 +84,7 @@ export class GameView {
         return parachutist;
     }
 
-    updateScores(scores: Score) {
+    updateScoresDisplay(scores: Score) {
         this.scores.innerText = `SCORE: ${scores.score} LIVES: ${scores.lives}`;
     }
 }

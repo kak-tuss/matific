@@ -3,7 +3,7 @@ import { PlaneModel } from "./entities/plane/plane.model";
 import { Score } from "./interfaces";
 
 export class Game {
-    scores: Score = {
+    private scores: Score = {
         score: 0,
         lives: 3
     }
@@ -13,5 +13,17 @@ export class Game {
     constructor(boat: BoatModel, plane: PlaneModel) {
         this.boat = boat;
         this.plane = plane;
+    }
+
+    getScores(): Score {
+        return this.scores;
+    }
+
+    setScore(score: number) {
+        this.scores.score = score;
+    }
+
+    setLives(lives: number) {
+        this.scores.lives = lives;
     }
 }
