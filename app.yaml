@@ -1,0 +1,4 @@
+service: matific
+- name: Lint Action
+  uses: wearerequired/lint-action@v1.10.0
+
