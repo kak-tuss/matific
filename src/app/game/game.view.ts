@@ -16,7 +16,7 @@ export class GameView {
 
     halfBoat: number = 0;
 
-    game: Game;
+    game: Game; 
     scores: any;
 
     constructor(
